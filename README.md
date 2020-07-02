@@ -7,7 +7,7 @@ echo "secretKey" | gpg --batch --no-tty --yes --passphrase-fd 0 --symmetric -o f
 Decrypt:
 echo "secretKey" | gpg --batch --no-tty --yes --passphrase-fd 0 --decrypt -o file.txt file.txt.gpg
 
-(to encrypt the serviceAccout.json)"
+(to encrypt the serviceAccout.json)" 
 
 ## Docker set up
 # build environment
