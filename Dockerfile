@@ -1,13 +1,26 @@
-# build environment
-FROM node:9.6.1 as builder
-RUN mkdir /usr/src/app
-WORKDIR /usr/src/app
-ENV PATH /usr/src/app/node_modules/.bin:$PATH
-COPY package.json /usr/src/app/package.json
-RUN npm install
-RUN npm install react-scripts@1.1.1 -g 
-COPY . /usr/src/app
+FROM node:13.8.0-alpine3.10
+
+WORKDIR /google-cloud-test
+
+COPY package.json package.json* ./
+COPY client/package.json client/package.json* ./client/
+
+COPY . .
+
+# Install and build parallel client
 RUN cd client \
- npm run build \
- cd ..
+    && npm install --no-optional \
+    && npm cache clean --force \
+    && npm run build \
+    && cd ..
+
+# Install server dependencies
+RUN npm install --no-optional && npm cache clean --force
+
+# Set environment varables passed in from cloud provider
+ENV NODE_ENV=production \
+    PORT=8080
+
+EXPOSE 8080
+
 CMD ["npm", "start"]
